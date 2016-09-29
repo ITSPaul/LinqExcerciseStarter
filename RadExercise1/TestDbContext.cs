@@ -157,7 +157,19 @@ namespace RadExercise1
                     Error = "ok Member Added";
                     return true;
         }
-
+        public bool Approve(string ClubName, Guid Id , out string Message)
+        {
+            // check valid club
+            Club club = Clubs.Where(c => c.ClubName == ClubName).FirstOrDefault();
+            if (club == null) { Message = "Club does not exist"; return false; }
+            // check valid member of that club
+            Member UnaprovedMember = club.ClubMembers.Where(m => m.memberID == Id).Single();
+            if(UnaprovedMember == null) { Message = "Member does not exist "; return false; }
+            // Approve member
+            UnaprovedMember.approved = true;
+            Message = "Member Approved";
+            return true;
+        }
         public List<Member> GetMembers(int count)
         {
             return Students.Select(s =>
